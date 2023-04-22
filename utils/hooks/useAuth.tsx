@@ -3,12 +3,14 @@ import { useRecoilState } from "recoil";
 import { SignInProps, apiPost } from "../client";
 import { ApiResponse } from "../types";
 import { useEffect } from "react";
+import useAccounts from "./useAccounts";
 
 export default function useAuth() {
   const [user, setUser] = useRecoilState(userState);
+  const { fetchAndSetAccounts } = useAccounts();
 
   useEffect(() => {
-    const cachedUser = sessionStorage.getItem("currentUser");
+    const cachedUser = sessionStorage.getItem("_user");
     if (cachedUser) setUser(JSON.parse(cachedUser));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -23,7 +25,8 @@ export default function useAuth() {
 
     const user = response.data;
     setUser(user);
-    sessionStorage.setItem("currentUser", JSON.stringify(user));
+    await fetchAndSetAccounts(user.id);
+    sessionStorage.setItem("_user", JSON.stringify(user));
     return true;
   };
   const signOut = () => {

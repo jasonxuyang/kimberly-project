@@ -14,7 +14,7 @@ export default async function handler(
     const client = new PrismaClient();
     switch (role) {
       case Role.PROFESSOR: {
-        const result = await client.user.create({
+        const user = await client.user.create({
           data: {
             firstName,
             lastName,
@@ -25,10 +25,10 @@ export default async function handler(
             },
           },
         });
-        return res.status(201).json({ success: true, data: result });
+        return res.status(201).json({ success: true, data: user });
       }
       case Role.STUDENT: {
-        const result = await client.user.create({
+        const user = await client.user.create({
           data: {
             firstName,
             lastName,
@@ -39,10 +39,10 @@ export default async function handler(
             },
           },
         });
-        return res.status(201).json({ success: true, data: result });
+        return res.status(201).json({ success: true, data: user });
       }
       case Role.TA: {
-        const result = await client.user.create({
+        const user = await client.user.create({
           data: {
             firstName,
             lastName,
@@ -53,7 +53,7 @@ export default async function handler(
             },
           },
         });
-        return res.status(201).json({ success: true, data: result });
+        return res.status(201).json({ success: true, data: user });
       }
       default:
         throw new Error(`Unable to create a user of type ${role}.`);

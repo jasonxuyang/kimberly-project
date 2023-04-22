@@ -56,3 +56,13 @@ export type SignInProps = {
 export const signIn = async (data: SignInProps) => {
   return await apiPost("/api/auth/signin", data);
 };
+
+export const fetchAccounts = async (userId: string) => {
+  return await apiPost("/api/user/account", userId);
+};
+
+export type FetchClassesProps = {
+  accountId: string;
+  role: Role;
+};
+export const fetchClasses = async (data: FetchClassesProps) => {};

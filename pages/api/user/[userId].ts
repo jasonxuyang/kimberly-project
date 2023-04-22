@@ -9,7 +9,6 @@ export default async function handler(
   res: NextApiResponse<ApiResponse>
 ) {
   const userId = req.query.userId;
-  console.log(userId);
   const { firstName, lastName, email } = req.body;
 
   try {
@@ -19,6 +18,7 @@ export default async function handler(
         const user = await client.user.findUnique({
           where: { id: String(userId) },
         });
+
         return res.status(201).json({ success: true, data: user });
       }
       case HTTP_METHODS[3]: {

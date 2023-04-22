@@ -2,6 +2,7 @@ import { SignUpProps, signUp } from "@/utils/client";
 import useAuth from "@/utils/hooks/useAuth";
 import { ApiError, ApiResponse } from "@/utils/types";
 import { Role, User } from "@prisma/client";
+import { useRouter } from "next/router";
 import { BaseSyntheticEvent, useState } from "react";
 
 export default function SignUp() {
@@ -12,6 +13,7 @@ export default function SignUp() {
   const [role, setRole] = useState<Role>(Role.STUDENT);
   const [error, setError] = useState<ApiError | null>(null);
   const { signIn } = useAuth();
+  const router = useRouter();
 
   const onSubmit = async (e: BaseSyntheticEvent) => {
     // Prevent the browser from reloading the page
@@ -28,6 +30,7 @@ export default function SignUp() {
       console.log("Sign up successful");
       const userData = response.data;
       signIn(userData);
+      router.push("/");
     } else {
       setError(response.data.type);
       console.error(error);
