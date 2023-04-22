@@ -3,7 +3,7 @@ import { ApiError, ApiResponse } from "@/utils/types";
 import { PrismaClient, Role } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handle(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ApiResponse>
 ) {

@@ -4,11 +4,12 @@ import { PrismaClient } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { HTTP_METHODS } from "next/dist/server/web/http";
 
-export default async function handle(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ApiResponse>
 ) {
-  const userId = req.query.id;
+  const userId = req.query.userId;
+  console.log(userId);
   const { firstName, lastName, email } = req.body;
 
   try {

@@ -1,6 +1,8 @@
 import { Role } from "@prisma/client";
 import { HTTP_METHODS } from "next/dist/server/web/http";
-import { ApiResponse } from "./types";
+
+export const fetcher = (url: string) =>
+  fetch(url).then((response) => response.json());
 
 export const apiPut = async (route: string, body: any) => {
   const response = await fetch(route, {

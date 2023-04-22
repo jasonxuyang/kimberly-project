@@ -11,6 +11,9 @@ export default function Home() {
             {user?.firstName} {user?.lastName}
           </div>
           <div>{user?.email}</div>
+          <button>
+            <Link href="/profile">View Profile</Link>
+          </button>
           <button onClick={signOut}>Sign out</button>
         </div>
       )}
