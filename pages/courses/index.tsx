@@ -2,7 +2,7 @@ import { Course } from "@prisma/client";
 import useSWR from "swr";
 import { fetcher } from "@/utils/client";
 import { useRouter } from "next/router";
-import CreateCourse from "@/components/createCourse";
+import CreateCourse from "@/components/CreateCourseModal";
 
 export default function Courses() {
   const router = useRouter();

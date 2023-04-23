@@ -1,4 +1,5 @@
 import CreatePost from "@/components/createPost";
+import ReplyPost from "@/components/replyPost";
 import { fetcher } from "@/utils/client";
 import useAccounts from "@/utils/hooks/useAccounts";
 import useAuth from "@/utils/hooks/useAuth";
@@ -12,7 +13,7 @@ export default function Home() {
   const { hasAccount } = useAccounts();
   const { data, isLoading } = useSWR(`/api/posts`, fetcher);
   if (isLoading) return <main>loading</main>;
-  const posts: Post[] = data.data;
+  const posts: Array<Post & { children?: Post[] }> = data.data;
 
   const renderRoleChooser = () => {
     return (
@@ -43,7 +44,21 @@ export default function Home() {
       return (
         <div key={post.id} className="border-white border-2 m-2 p-2">
           <div className="text-xl">{post.title}</div>
+          <div className="text-sm mb-2">{post.userFirstName}</div>
           <div>{post.content}</div>
+          <ReplyPost parentId={post.id} />
+          <div>
+            {post.children?.map((reply) => {
+              return (
+                <div key={reply.id}>
+                  <div className="text-sm mb-2 inline mr-2">
+                    {reply.userFirstName ?? "Anonymous"}
+                  </div>
+                  {reply.content}{" "}
+                </div>
+              );
+            })}
+          </div>
         </div>
       );
     });

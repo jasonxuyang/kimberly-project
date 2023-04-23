@@ -79,7 +79,7 @@ model Post {
   userFirstName String?
   userLastName  String?
   userRole      Role?
-  title         String
+  title         String?
   content       String
   datePosted    DateTime @default(now())
   course        Course?  @relation(fields: [courseId], references: [id])

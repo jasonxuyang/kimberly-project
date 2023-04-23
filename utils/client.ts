@@ -89,7 +89,7 @@ export type UserAndRole = {
 
 export type CreatePostProps = {
   content: string;
-  title: string;
+  title?: string;
   courseId?: string;
   parentId?: string;
   userAndRole?: UserAndRole;

@@ -2,14 +2,14 @@ import { BaseSyntheticEvent, useState } from "react";
 import { CreatePostProps, createPost } from "@/utils/client";
 import { ApiError, ApiResponse } from "@/utils/types";
 import { mutate } from "swr";
-import useAuth from "@/utils/hooks/useAuth";
 import useRole from "@/utils/hooks/useRole";
+import useAuth from "@/utils/hooks/useAuth";
 
-export type PostCreatorProps = {
+export type PostReplyProps = {
+  parentId: string;
   courseId?: string;
 };
-export default function CreatePost({ courseId }: PostCreatorProps) {
-  const [postTitle, setPostTitle] = useState("");
+export default function ReplyPost({ courseId, parentId }: PostReplyProps) {
   const [postContent, setPostContent] = useState("");
   const [error, setError] = useState<ApiError | null>(null);
   const { currentRole } = useRole();
@@ -18,9 +18,9 @@ export default function CreatePost({ courseId }: PostCreatorProps) {
   const onSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault();
     const postData: CreatePostProps = {
-      title: postTitle,
       content: postContent,
-      courseId: courseId,
+      parentId: parentId ?? undefined,
+      courseId: courseId ?? undefined,
       userAndRole:
         user && currentRole ? { id: user?.id, role: currentRole } : undefined,
     };
@@ -38,32 +38,19 @@ export default function CreatePost({ courseId }: PostCreatorProps) {
     <div>
       {error && <div>Error: {error}</div>}
       <form onSubmit={onSubmit}>
-        <label htmlFor="postTitle">
-          Post Title:{" "}
-          <input
-            type="text"
-            name="postTitle"
-            value={postTitle}
-            onChange={(e) => setPostTitle(e.target.value)}
-            className="text-black"
-            required
-          />
-        </label>
         <label htmlFor="postContent">
-          Post Content:{" "}
-          <textarea
+          <input
             name="postContent"
             onChange={(e) => {
               console.log(e.target.value);
               setPostContent(e.target.value);
             }}
+            value={postContent}
             className="text-black"
             required
-          >
-            {postContent}
-          </textarea>
+          />
         </label>
-        <button type="submit">Create Post</button>
+        <button type="submit">Reply</button>
       </form>
     </div>
   );
