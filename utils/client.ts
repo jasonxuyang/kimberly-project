@@ -102,6 +102,12 @@ export type DeletePostProps = {
   postId: string;
 };
 export const deletePost = async (data: DeletePostProps) => {
-  console.log(data);
   return await apiPost("/api/posts/delete", data);
+};
+
+export type DeleteCourseProps = {
+  courseId: string;
+};
+export const deleteCourse = async (data: DeleteCourseProps) => {
+  return await apiDelete(`/api/course/${data.courseId}`, data);
 };

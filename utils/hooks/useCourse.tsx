@@ -1,10 +1,12 @@
 import useSWR, { mutate } from "swr";
-import { fetcher, joinCourse, leaveCourse } from "../client";
+import { deleteCourse, fetcher, joinCourse, leaveCourse } from "../client";
 import useAccounts from "./useAccounts";
 import useRole from "./useRole";
 import { Course, Role } from "@prisma/client";
+import { useRouter } from "next/router";
 
 export default function useCourse(courseId: string) {
+  const router = useRouter();
   const { currentRole } = useRole();
   const { currentAccount } = useAccounts();
   const { data, isLoading } = useSWR(`/api/course/${courseId}`, fetcher);
@@ -47,6 +49,13 @@ export default function useCourse(courseId: string) {
     mutate(`/api/course/${courseId}`);
   };
 
+  const deleteCurrentCourse = async () => {
+    if (!currentRole || !courseId || !currentAccount?.id) return;
+    if (currentRole !== Role.PROFESSOR) return;
+    await deleteCourse({ courseId });
+    router.push("/courses");
+  };
+
   return {
     course: !isLoading && data.success && data.data,
     isLoading,
@@ -54,5 +63,6 @@ export default function useCourse(courseId: string) {
     isMemberOfCurrentCourse: isMemberOfCourse(),
     joinCurrentCourse,
     leaveCurrentCourse,
+    deleteCurrentCourse,
   };
 }

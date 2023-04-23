@@ -1,4 +1,4 @@
-import { Assistant, Course, Student } from "@prisma/client";
+import { Assistant, Course, Role, Student } from "@prisma/client";
 import { useRouter } from "next/router";
 import { Professor } from "@prisma/client";
 import useRole from "@/utils/hooks/useRole";
@@ -17,6 +17,7 @@ export default function Course() {
     isMemberOfCurrentCourse,
     joinCurrentCourse,
     leaveCurrentCourse,
+    deleteCurrentCourse,
   } = useCourse(courseId as string);
 
   if (isLoading) return <main>Loading...</main>;
@@ -33,6 +34,17 @@ export default function Course() {
     return <div onClick={leaveCurrentCourse}>Leave Course</div>;
   };
 
+  const deleteCourseButton = () => {
+    if (
+      !currentRole ||
+      !courseId ||
+      !currentAccount?.id ||
+      !isMemberOfCurrentCourse ||
+      currentRole !== Role.PROFESSOR
+    )
+      return null;
+    return <div onClick={deleteCurrentCourse}>Delete Course</div>;
+  };
   const renderProfessors = () => {
     return professors.map((professor: Professor) => {
       return (
@@ -78,13 +90,10 @@ export default function Course() {
     });
   };
 
-  const createPostButton = () => {
-    
-  }
-
   return (
     <main>
       {!isMemberOfCurrentCourse ? joinCourseButton() : leaveCourseButton()}
+      {deleteCourseButton()}
       <div className="mb-4">Course Name: {name}</div>
       <div className="mb-4">Professors: {renderProfessors()}</div>
       <div className="mb-4">Assistants: {renderAssistants()}</div>
