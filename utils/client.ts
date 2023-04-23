@@ -1,4 +1,4 @@
-import { Course, Role } from "@prisma/client";
+import { Role } from "@prisma/client";
 import { HTTP_METHODS } from "next/dist/server/web/http";
 
 export const fetcher = (url: string) =>
@@ -96,4 +96,12 @@ export type CreatePostProps = {
 };
 export const createPost = async (data: CreatePostProps) => {
   return await apiPut("/api/posts", data);
+};
+
+export type DeletePostProps = {
+  postId: string;
+};
+export const deletePost = async (data: DeletePostProps) => {
+  console.log(data);
+  return await apiPost("/api/posts/delete", data);
 };

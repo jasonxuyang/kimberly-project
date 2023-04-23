@@ -1,11 +1,11 @@
 import CreatePost from "@/components/createPost";
 import ReplyPost from "@/components/replyPost";
-import { fetcher } from "@/utils/client";
+import { deletePost, fetcher } from "@/utils/client";
 import useAccounts from "@/utils/hooks/useAccounts";
 import useAuth from "@/utils/hooks/useAuth";
 import useRole from "@/utils/hooks/useRole";
 import { Post, Role } from "@prisma/client";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 
 export default function Home() {
   const { isSignedIn } = useAuth();
@@ -47,6 +47,14 @@ export default function Home() {
           <div className="text-sm mb-2">{post.userFirstName}</div>
           <div>{post.content}</div>
           <ReplyPost parentId={post.id} />
+          <button
+            onClick={async () => {
+              await deletePost({ postId: post.id });
+              mutate("api/posts");
+            }}
+          >
+            Delete
+          </button>
           <div>
             {post.children?.map((reply) => {
               return (

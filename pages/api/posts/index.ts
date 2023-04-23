@@ -1,5 +1,5 @@
 import prisma from "@/prisma/prisma";
-import { CreatePostProps } from "@/utils/client";
+import { CreatePostProps, DeletePostProps } from "@/utils/client";
 import { ApiError, ApiResponse } from "@/utils/types";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { HTTP_METHODS } from "next/dist/server/web/http";
@@ -32,8 +32,6 @@ export default async function handler(
           courseId,
           userAndRole,
         }: CreatePostProps = req.body;
-        console.log(req.body);
-
         const post = await prisma.post.create({
           data: {
             title: title,
