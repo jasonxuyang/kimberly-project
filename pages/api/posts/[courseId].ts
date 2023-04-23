@@ -8,13 +8,16 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ApiResponse>
 ) {
+  const courseId = req.query.courseId;
   try {
     switch (req.method) {
       case HTTP_METHODS[0]: {
         const posts = await prisma.post.findMany({
           where: {
             parent: null,
-            course: null,
+            course: {
+              id: String(courseId),
+            },
           },
           orderBy: {
             datePosted: "desc",
@@ -24,38 +27,6 @@ export default async function handler(
           },
         });
         return res.status(201).json({ success: true, data: posts });
-      }
-      case HTTP_METHODS[4]: {
-        const {
-          title,
-          content,
-          parentId,
-          courseId,
-          userAndRole,
-        }: CreatePostProps = req.body;
-        const post = await prisma.post.create({
-          data: {
-            title: title,
-            content: content,
-            parent: parentId
-              ? {
-                  connect: { id: parentId },
-                }
-              : undefined,
-            course: courseId
-              ? {
-                  connect: { id: courseId },
-                }
-              : undefined,
-            user: userAndRole
-              ? {
-                  connect: { id: userAndRole?.id },
-                }
-              : undefined,
-            userRole: userAndRole?.role,
-          },
-        });
-        return res.status(201).json({ success: true, data: post });
       }
       default:
         throw new Error(

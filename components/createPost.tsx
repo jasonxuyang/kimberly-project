@@ -27,7 +27,11 @@ export default function CreatePost({ courseId }: PostCreatorProps) {
     const response: ApiResponse = await createPost(postData);
     if (response.success) {
       console.log("Post created successfully");
-      mutate(`/api/posts`);
+      if (courseId) {
+        mutate(`/api/posts/${courseId}`);
+      } else {
+        mutate(`/api/posts`);
+      }
     } else {
       setError(response.data.type);
       console.error(error);
@@ -53,15 +57,11 @@ export default function CreatePost({ courseId }: PostCreatorProps) {
           Post Content:{" "}
           <textarea
             name="postContent"
-            onChange={(e) => {
-              console.log(e.target.value);
-              setPostContent(e.target.value);
-            }}
+            onChange={(e) => setPostContent(e.target.value)}
             className="text-black"
+            value={postContent}
             required
-          >
-            {postContent}
-          </textarea>
+          />
         </label>
         <button type="submit">Create Post</button>
       </form>

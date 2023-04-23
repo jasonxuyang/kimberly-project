@@ -19,15 +19,19 @@ export default function ReplyPost({ courseId, parentId }: PostReplyProps) {
     e.preventDefault();
     const postData: CreatePostProps = {
       content: postContent,
-      parentId: parentId ?? undefined,
-      courseId: courseId ?? undefined,
+      parentId: parentId,
+      courseId: courseId,
       userAndRole:
         user && currentRole ? { id: user?.id, role: currentRole } : undefined,
     };
     const response: ApiResponse = await createPost(postData);
     if (response.success) {
-      console.log("Post created successfully");
-      mutate(`/api/posts`);
+      console.log("Reply created successfully");
+      if (courseId) {
+        mutate(`/api/posts/${courseId}`);
+      } else {
+        mutate(`/api/posts`);
+      }
     } else {
       setError(response.data.type);
       console.error(error);
@@ -41,10 +45,7 @@ export default function ReplyPost({ courseId, parentId }: PostReplyProps) {
         <label htmlFor="postContent">
           <input
             name="postContent"
-            onChange={(e) => {
-              console.log(e.target.value);
-              setPostContent(e.target.value);
-            }}
+            onChange={(e) => setPostContent(e.target.value)}
             value={postContent}
             className="text-black"
             required

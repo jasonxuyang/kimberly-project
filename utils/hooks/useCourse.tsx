@@ -9,11 +9,18 @@ export default function useCourse(courseId: string) {
   const router = useRouter();
   const { currentRole } = useRole();
   const { currentAccount } = useAccounts();
-  const { data, isLoading } = useSWR(`/api/course/${courseId}`, fetcher);
+  const { data: courseData, isLoading: courseIsLoading } = useSWR(
+    `/api/course/${courseId}`,
+    fetcher
+  );
+  const { data: postsData, isLoading: postsIsLoading } = useSWR(
+    `/api/posts/${courseId}`,
+    fetcher
+  );
 
   const isMemberOfCourse = () => {
-    if (isLoading || !data.success) return false;
-    const course: Course = data.data;
+    if (courseIsLoading || !courseData.success) return false;
+    const course: Course = courseData.data;
     switch (currentRole) {
       case Role.PROFESSOR: {
         return course.professorIds.some((id) => id === currentAccount?.id);
@@ -57,9 +64,12 @@ export default function useCourse(courseId: string) {
   };
 
   return {
-    course: !isLoading && data.success && data.data,
-    isLoading,
-    isError: !isLoading && !data.success,
+    course: !courseIsLoading && courseData.success && courseData.data,
+    posts: !postsIsLoading && postsData.success && postsData.data,
+    courseIsLoading,
+    postsIsLoading,
+    courseIsError: !courseIsLoading && !courseData.success,
+    postsIsError: !postsIsLoading && !postsData.success,
     isMemberOfCurrentCourse: isMemberOfCourse(),
     joinCurrentCourse,
     leaveCurrentCourse,
