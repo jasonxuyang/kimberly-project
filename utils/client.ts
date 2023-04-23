@@ -82,8 +82,18 @@ export const leaveCourse = async (data: JoinAndLeaveCourseProps) => {
   return await apiPost("/api/course/leave", data);
 };
 
-export type CreatePostProps = {
-  title?: string;
-  content: string;
+export type UserAndRole = {
+  id: string;
+  role: Role;
 };
-export const createPost = async () => {};
+
+export type CreatePostProps = {
+  content: string;
+  title: string;
+  courseId?: string;
+  parentId?: string;
+  userAndRole?: UserAndRole;
+};
+export const createPost = async (data: CreatePostProps) => {
+  return await apiPut("/api/posts", data);
+};

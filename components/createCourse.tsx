@@ -5,7 +5,7 @@ import { Role } from "@prisma/client";
 import { BaseSyntheticEvent, useState } from "react";
 import { CreateCourseProps, createCourse } from "@/utils/client";
 import { ApiError, ApiResponse } from "@/utils/types";
-import { mutate, useSWRConfig } from "swr";
+import { mutate } from "swr";
 
 export default function CreateCourse() {
   const { isSignedIn } = useAuth();

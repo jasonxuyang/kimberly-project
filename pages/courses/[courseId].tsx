@@ -78,6 +78,10 @@ export default function Course() {
     });
   };
 
+  const createPostButton = () => {
+    
+  }
+
   return (
     <main>
       {!isMemberOfCurrentCourse ? joinCourseButton() : leaveCourseButton()}
