@@ -1,6 +1,5 @@
 import prisma from "@/prisma/prisma";
 import { ApiResponse } from "@/utils/types";
-import { PrismaClient } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { HTTP_METHODS } from "next/dist/server/web/http";
 
@@ -8,28 +7,32 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ApiResponse>
 ) {
-  const userId = req.query.userId;
+  const courseId = req.query.courseId;
 
   try {
     switch (req.method) {
       case HTTP_METHODS[0]: {
-        const user = await prisma.user.findUnique({
-          where: { id: String(userId) },
+        const course = await prisma.course.findUnique({
+          where: { id: String(courseId) },
+          include: {
+            professors: true,
+            assistants: true,
+            students: true,
+          },
         });
-
-        return res.status(201).json({ success: true, data: user });
+        return res.status(201).json({ success: true, data: course });
       }
       case HTTP_METHODS[3]: {
-        const { firstName, lastName, email } = req.body;
-        const user = await prisma.user.update({
-          where: { id: String(userId) },
-          data: { firstName, lastName, email },
+        const { name, professorIds, assistantIds, studentIds } = req.body;
+        const user = await prisma.course.update({
+          where: { id: String(courseId) },
+          data: { name, professorIds, assistantIds, studentIds },
         });
         return res.status(201).json({ success: true, data: user });
       }
       case HTTP_METHODS[5]: {
-        const user = await prisma.user.delete({
-          where: { id: String(userId) },
+        const user = await prisma.course.delete({
+          where: { id: String(courseId) },
         });
         return res.status(201).json({ success: true, data: user });
       }

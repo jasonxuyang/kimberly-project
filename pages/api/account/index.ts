@@ -1,3 +1,4 @@
+import prisma from "@/prisma/prisma";
 import { ApiError, ApiResponse } from "@/utils/types";
 import { PrismaClient } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -8,18 +9,17 @@ export default async function handler(
 ) {
   try {
     const userId = req.body;
-    const client = new PrismaClient();
-    const studentAccount = await client.student.findUnique({
+    const studentAccount = await prisma.student.findUnique({
       where: {
         userId: String(userId),
       },
     });
-    const professorAccount = await client.professor.findUnique({
+    const professorAccount = await prisma.professor.findUnique({
       where: {
         userId: String(userId),
       },
     });
-    const assistantAccount = await client.assistant.findUnique({
+    const assistantAccount = await prisma.assistant.findUnique({
       where: {
         userId: String(userId),
       },

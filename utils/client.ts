@@ -1,4 +1,4 @@
-import { Role } from "@prisma/client";
+import { Course, Role } from "@prisma/client";
 import { HTTP_METHODS } from "next/dist/server/web/http";
 
 export const fetcher = (url: string) =>
@@ -58,11 +58,51 @@ export const signIn = async (data: SignInProps) => {
 };
 
 export const fetchAccounts = async (userId: string) => {
-  return await apiPost("/api/user/account", userId);
+  return await apiPost("/api/account", userId);
 };
 
-export type FetchClassesProps = {
+export type CreateCourseProps = {
   accountId: string;
+  courseName: string;
+};
+export const createCourse = async (data: CreateCourseProps) => {
+  return await apiPut("/api/course", data);
+};
+
+export type JoinAndLeaveCourseProps = {
+  accountId: string;
+  courseId: string;
   role: Role;
 };
-export const fetchClasses = async (data: FetchClassesProps) => {};
+export const joinCourse = async (data: JoinAndLeaveCourseProps) => {
+  return await apiPost("/api/course/join", data);
+};
+
+export const leaveCourse = async (data: JoinAndLeaveCourseProps) => {
+  return await apiPost("/api/course/leave", data);
+};
+
+export type IsMemberOfCourseProps = {
+  accountId: string | null;
+  role: Role | null;
+  course: Course;
+};
+export const checkIsMemberOfCourse = ({
+  accountId,
+  role,
+  course,
+}: IsMemberOfCourseProps) => {
+  switch (role) {
+    case Role.PROFESSOR: {
+      return course.professorIds.some((id) => id === accountId);
+    }
+    case Role.TA: {
+      return course.assistantIds.some((id) => id === accountId);
+    }
+    case Role.STUDENT: {
+      return course.studentIds.some((id) => id === accountId);
+    }
+    default:
+      return false;
+  }
+};

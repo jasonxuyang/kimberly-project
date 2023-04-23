@@ -1,6 +1,6 @@
+import prisma from "@/prisma/prisma";
 import { SignInProps } from "@/utils/client";
 import { ApiError, ApiResponse } from "@/utils/types";
-import { PrismaClient } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -10,8 +10,7 @@ export default async function handler(
   try {
     const { email, password }: SignInProps = req.body;
 
-    const client = new PrismaClient();
-    const user = await client.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         email: email,
       },

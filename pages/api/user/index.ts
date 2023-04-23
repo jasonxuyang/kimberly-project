@@ -1,6 +1,7 @@
+import prisma from "@/prisma/prisma";
 import { SignUpProps } from "@/utils/client";
 import { ApiError, ApiResponse } from "@/utils/types";
-import { PrismaClient, Role } from "@prisma/client";
+import { Role } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -10,11 +11,9 @@ export default async function handler(
   try {
     const { firstName, lastName, email, role, password }: SignUpProps =
       req.body;
-
-    const client = new PrismaClient();
     switch (role) {
       case Role.PROFESSOR: {
-        const user = await client.user.create({
+        const user = await prisma.user.create({
           data: {
             firstName,
             lastName,
@@ -28,7 +27,7 @@ export default async function handler(
         return res.status(201).json({ success: true, data: user });
       }
       case Role.STUDENT: {
-        const user = await client.user.create({
+        const user = await prisma.user.create({
           data: {
             firstName,
             lastName,
@@ -42,7 +41,7 @@ export default async function handler(
         return res.status(201).json({ success: true, data: user });
       }
       case Role.TA: {
-        const user = await client.user.create({
+        const user = await prisma.user.create({
           data: {
             firstName,
             lastName,
