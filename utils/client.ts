@@ -82,27 +82,8 @@ export const leaveCourse = async (data: JoinAndLeaveCourseProps) => {
   return await apiPost("/api/course/leave", data);
 };
 
-export type IsMemberOfCourseProps = {
-  accountId: string | null;
-  role: Role | null;
-  course: Course;
+export type CreatePostProps = {
+  title?: string;
+  content: string;
 };
-export const checkIsMemberOfCourse = ({
-  accountId,
-  role,
-  course,
-}: IsMemberOfCourseProps) => {
-  switch (role) {
-    case Role.PROFESSOR: {
-      return course.professorIds.some((id) => id === accountId);
-    }
-    case Role.TA: {
-      return course.assistantIds.some((id) => id === accountId);
-    }
-    case Role.STUDENT: {
-      return course.studentIds.some((id) => id === accountId);
-    }
-    default:
-      return false;
-  }
-};
+export const createPost = async () => {};
