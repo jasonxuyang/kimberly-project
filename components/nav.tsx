@@ -24,11 +24,16 @@ export default function Nav() {
     return (
       <div className="flex flex-row gap-2">
         <button className="border-solid border-white border-2 p-2">
-          <Link href={`/profile/${user?.id}`}>Profile</Link>
+          <Link href={`/`}>Home</Link>
         </button>
         <button className="border-solid border-white border-2 p-2">
           <Link href={`/courses`}>Courses</Link>
         </button>
+        {isSignedIn && (
+          <button className="border-solid border-white border-2 p-2">
+            <Link href={`/profile/${user?.id}`}>Profile</Link>
+          </button>
+        )}
       </div>
     );
   };

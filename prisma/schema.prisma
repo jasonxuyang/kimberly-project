@@ -19,6 +19,7 @@ model User {
   student   Student?
   assistant Assistant?
   professor Professor?
+  posts     Post[]
 
   @@unique([id, firstName, lastName])
 }
@@ -72,23 +73,20 @@ model Course {
 }
 
 model Post {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  authorId   String    @db.ObjectId
-  authorRole Role
-  title      String
-  content    String
-  datePosted DateTime  @default(now())
-  comments   Comment[]
-  course     Course    @relation(fields: [courseId], references: [id])
-  courseId   String    @db.ObjectId
-}
-
-model Comment {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  content    String
-  datePosted DateTime @default(now())
-  post       Post     @relation(fields: [postId], references: [id])
-  postId     String   @unique @db.ObjectId
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  user          User?    @relation(fields: [userId, userFirstName, userLastName], references: [id, firstName, lastName])
+  userId        String?  @unique @db.ObjectId
+  userFirstName String?
+  userLastName  String?
+  userRole      Role?
+  title         String
+  content       String
+  datePosted    DateTime @default(now())
+  course        Course?  @relation(fields: [courseId], references: [id])
+  courseId      String?  @db.ObjectId
+  parent        Post?    @relation("ParentChildren", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  parentId      String   @unique @db.ObjectId
+  children      Post[]   @relation("ParentChildren")
 }
 
 enum Role {
