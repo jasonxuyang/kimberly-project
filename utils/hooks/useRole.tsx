@@ -1,6 +1,6 @@
 import { useRecoilState, useRecoilValue } from "recoil";
 
-import accountsState from "@/recoil/accountsState";
+import accountsState, { AccountsState } from "@/recoil/accountsState";
 import roleState from "@/recoil/roleState";
 import { Role } from "@prisma/client";
 import { useEffect } from "react";
@@ -16,6 +16,14 @@ export default function useRole() {
   }, []);
 
   const currentRole = role;
+
+  const defaultRole = (accounts: AccountsState) => {
+    if (accounts?.professor) return Role.PROFESSOR;
+    if (accounts?.assistant) return Role.TA;
+    if (accounts?.student) return Role.STUDENT;
+    return;
+  };
+
   const setCurrentRole = (role: Role) => {
     switch (role) {
       case Role.PROFESSOR:
@@ -32,5 +40,5 @@ export default function useRole() {
         break;
     }
   };
-  return { setCurrentRole, currentRole };
+  return { setCurrentRole, currentRole, defaultRole };
 }

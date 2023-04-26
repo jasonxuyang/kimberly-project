@@ -62,9 +62,9 @@ export default function SignIn() {
         </button>
         <div className="w-full text-center">
           Don&apos;t have an acccount?{" "}
-          <a className="underline hover:text-blue-500">
-            <Link href="/signup">Sign Up</Link>
-          </a>
+          <Link className="underline hover:text-blue-500" href="/signup">
+            Sign Up
+          </Link>
         </div>
       </form>
     </main>

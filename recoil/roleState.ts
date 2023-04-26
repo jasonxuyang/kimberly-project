@@ -1,4 +1,4 @@
-import { Assistant, Professor, Role, Student } from "@prisma/client";
+import { Role } from "@prisma/client";
 import { atom } from "recoil";
 
 const roleState = atom<Role | null>({

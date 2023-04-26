@@ -1,5 +1,5 @@
 import { useRecoilState } from "recoil";
-import { fetchAccounts } from "../client";
+import { AccountAndRole, fetchAccounts } from "../client";
 import { ApiResponse } from "../types";
 import { useEffect } from "react";
 import accountsState from "@/recoil/accountsState";
@@ -28,6 +28,7 @@ export default function useAccounts() {
   };
 
   const currentAccount = () => {
+    if (!currentRole) return;
     switch (currentRole) {
       case Role.PROFESSOR:
         return accounts?.professor;
@@ -44,8 +45,13 @@ export default function useAccounts() {
     if (success) {
       setAccounts(data);
       sessionStorage.setItem("_accounts", JSON.stringify(data));
+      return data;
     }
   };
 
-  return { hasAccount, fetchAndSetAccounts, currentAccount: currentAccount() };
+  return {
+    hasAccount,
+    fetchAndSetAccounts,
+    currentAccount: currentAccount(),
+  };
 }

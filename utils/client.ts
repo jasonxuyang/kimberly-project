@@ -1,4 +1,4 @@
-import { Role } from "@prisma/client";
+import { Assistant, Professor, Role, Student } from "@prisma/client";
 import { HTTP_METHODS } from "next/dist/server/web/http";
 
 export const fetcher = (url: string) =>
@@ -84,6 +84,11 @@ export const leaveCourse = async (data: JoinAndLeaveCourseProps) => {
 
 export type UserAndRole = {
   id: string;
+  role: Role;
+};
+
+export type AccountAndRole = {
+  account: Professor | Assistant | Student;
   role: Role;
 };
 

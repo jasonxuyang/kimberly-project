@@ -1,7 +1,7 @@
 import { Assistant, Professor, Role, Student } from "@prisma/client";
 import { atom } from "recoil";
 
-type AccountsState = {
+export type AccountsState = {
   student?: Student;
   professor?: Professor;
   assistant?: Assistant;

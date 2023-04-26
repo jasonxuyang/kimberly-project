@@ -1,5 +1,5 @@
 import userState from "@/recoil/userState";
-import { useRecoilState, useResetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { SignInProps, apiPost } from "../client";
 import { ApiResponse } from "../types";
 import { useEffect } from "react";
@@ -7,6 +7,7 @@ import useAccounts from "./useAccounts";
 import { useRouter } from "next/router";
 import accountsState from "@/recoil/accountsState";
 import roleState from "@/recoil/roleState";
+import useRole from "./useRole";
 
 export default function useAuth() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function useAuth() {
   const resetAccounts = useResetRecoilState(accountsState);
   const resetRole = useResetRecoilState(roleState);
   const { fetchAndSetAccounts } = useAccounts();
+  const { defaultRole, setCurrentRole } = useRole();
 
   useEffect(() => {
     const cachedUser = sessionStorage.getItem("_user");
@@ -32,7 +34,9 @@ export default function useAuth() {
 
     const user = response.data;
     setUser(user);
-    await fetchAndSetAccounts(user.id);
+    const accounts = await fetchAndSetAccounts(user.id);
+    const role = defaultRole(accounts);
+    if (role) setCurrentRole(role);
     sessionStorage.setItem("_user", JSON.stringify(user));
     return true;
   };
