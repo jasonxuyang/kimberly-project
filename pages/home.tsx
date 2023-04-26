@@ -42,7 +42,7 @@ export default function Home() {
   const renderPosts = () => {
     return posts.map((post) => {
       return (
-        <div key={post.id} className="border-white border-2 m-2 p-2">
+        <div key={post.id} className="border-black border-2 m-2 p-2">
           <div className="text-xl">{post.title}</div>
           <div className="text-sm mb-2">{post.userFirstName}</div>
           <div>{post.content}</div>

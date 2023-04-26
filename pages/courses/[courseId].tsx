@@ -99,7 +99,7 @@ export default function Course() {
   const renderPosts = () => {
     return posts.map((post: Post & { children?: Post[] }) => {
       return (
-        <div key={post.id} className="border-white border-2 m-2 p-2">
+        <div key={post.id} className="border-black border-2 m-2 p-2">
           <div className="text-xl">{post.title}</div>
           <div className="text-sm mb-2">{post.userFirstName}</div>
           <div>{post.content}</div>

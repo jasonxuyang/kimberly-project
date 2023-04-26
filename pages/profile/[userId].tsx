@@ -6,7 +6,6 @@ import NotFound from "../error/notFound";
 import { useRouter } from "next/router";
 import useRole from "@/utils/hooks/useRole";
 import useAccounts from "@/utils/hooks/useAccounts";
-import account from "../api/account";
 
 export default function Profile() {
   const router = useRouter();

@@ -28,37 +28,45 @@ export default function SignIn() {
   };
 
   return (
-    <main>
-      {error && <div>Error: {error}</div>}
-      <form onSubmit={onSubmit}>
-        <label htmlFor="email">
-          Email:{" "}
+    <main className="flex flex-col w-full items-center mt-16">
+      <form onSubmit={onSubmit} className="flex flex-col w-[90%] sm:w-96 gap-4">
+        <h2 className="font-semibold text-2xl">Sign In</h2>
+        <label htmlFor="email" className="flex flex-col w-full">
+          <p className="font-semibold">Email:</p>
           <input
             type="text"
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="text-black"
+            className="text-black outline outline-1 outline-black p-2 rounded-sm focus:outline-blue-500 focus:outline-2"
             required
           />
         </label>
-        <label htmlFor="lastName">
-          Password:{" "}
+        <label htmlFor="lastName" className="flex flex-col">
+          <p className="font-semibold">Password:</p>
           <input
             type="text"
             name="lastName"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="text-black"
+            className="text-black outline outline-1 outline-black p-2 rounded-sm focus:outline-blue-500 focus:outline-2"
             required
           />
         </label>
-        <button type="submit">Sign in</button>
+        {error && <p className="text-red-500">Error: {error}</p>}
+        <button
+          type="submit"
+          className="bg-blue-500 font-semibold text-white py-2 rounded-sm hover:bg-blue-600"
+        >
+          Sign in
+        </button>
+        <div className="w-full text-center">
+          Don&apos;t have an acccount?{" "}
+          <a className="underline hover:text-blue-500">
+            <Link href="/signup">Sign Up</Link>
+          </a>
+        </div>
       </form>
-      <div>Don&apos;t have an acccount?</div>
-      <button>
-        <Link href="/signup">Sign Up</Link>
-      </button>
     </main>
   );
 }

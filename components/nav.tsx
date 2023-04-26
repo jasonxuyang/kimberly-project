@@ -23,14 +23,14 @@ export default function Nav() {
   const renderLinks = () => {
     return (
       <div className="flex flex-row gap-2">
-        <button className="border-solid border-white border-2 p-2">
+        <button className="border-solid border-black border-2 p-2">
           <Link href={`/`}>Home</Link>
         </button>
-        <button className="border-solid border-white border-2 p-2">
+        <button className="border-solid border-black border-2 p-2">
           <Link href={`/courses`}>Courses</Link>
         </button>
         {isSignedIn && (
-          <button className="border-solid border-white border-2 p-2">
+          <button className="border-solid border-black border-2 p-2">
             <Link href={`/profile/${user?.id}`}>Profile</Link>
           </button>
         )}
@@ -42,14 +42,14 @@ export default function Nav() {
     if (isSignedIn)
       return (
         <button
-          className="border-solid border-white border-2 p-2"
+          className="border-solid border-black border-2 p-2"
           onClick={signOut}
         >
           Sign out
         </button>
       );
     return (
-      <button className="border-solid border-white border-2 p-2">
+      <button className="border-solid border-black border-2 p-2">
         <Link href={"/signin"}>Sign in</Link>
       </button>
     );
