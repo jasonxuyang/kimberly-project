@@ -50,7 +50,7 @@ export default function CreateCourse() {
             required
           />
         </label>
-        <button type="submit">Create Course</button>
+        <button type="submit" class="bg-blue-500 font-semibold text-white py-2 rounded-md hover:bg-blue-600" style="padding: 10px">Create Course</button>
       </form>
     </div>
   );
