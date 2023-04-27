@@ -7,9 +7,12 @@ import { useRouter } from "next/router";
 import useRole from "@/utils/hooks/useRole";
 import useAccounts from "@/utils/hooks/useAccounts";
 
-export default function Profile() {
+type ProfileProps = {
+  uid?: string;
+};
+export default function Profile({ uid }: ProfileProps) {
   const router = useRouter();
-  const userId = router.query.userId;
+  const userId = uid || router.query.userId;
   const { user, isSignedIn } = useAuth();
   const { currentRole } = useRole();
   const { currentAccount } = useAccounts();

@@ -4,10 +4,9 @@ import { Professor } from "@prisma/client";
 import useRole from "@/utils/hooks/useRole";
 import useAccounts from "@/utils/hooks/useAccounts";
 import useCourse from "@/utils/hooks/useCourse";
-import CreatePost from "@/components/createPost";
-import ReplyPost from "@/components/replyPost";
 import { deletePost } from "@/utils/client";
 import { mutate } from "swr";
+import { PostComponent, PostInputComponent } from "@/components/post";
 
 export default function Course() {
   const router = useRouter();
@@ -99,32 +98,11 @@ export default function Course() {
   const renderPosts = () => {
     return posts.map((post: Post & { children?: Post[] }) => {
       return (
-        <div key={post.id} className="border-black border-2 m-2 p-2">
-          <div className="text-xl">{post.title}</div>
-          <div className="text-sm mb-2">{post.userFirstName}</div>
-          <div>{post.content}</div>
-          <ReplyPost parentId={post.id} courseId={courseId as string} />
-          <button
-            onClick={async () => {
-              await deletePost({ postId: post.id });
-              mutate(`api/posts/${courseId}`);
-            }}
-          >
-            Delete
-          </button>
-          <div>
-            {post.children?.map((reply) => {
-              return (
-                <div key={reply.id}>
-                  <div className="text-sm mb-2 inline mr-2">
-                    {reply.userFirstName ?? "Anonymous"}
-                  </div>
-                  {reply.content}{" "}
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        <PostComponent
+          key={post.id}
+          postData={post}
+          courseId={courseId as string}
+        />
       );
     });
   };
@@ -133,7 +111,9 @@ export default function Course() {
     <main>
       {!isMemberOfCurrentCourse ? joinCourseButton() : leaveCourseButton()}
       {deleteCourseButton()}
-      {isMemberOfCurrentCourse && <CreatePost courseId={courseId as string} />}
+      {isMemberOfCurrentCourse && (
+        <PostInputComponent courseId={courseId as string} />
+      )}
       <div className="mb-4">Course Name: {name}</div>
       <div className="mb-4">Professors: {renderProfessors()}</div>
       <div className="mb-4">Assistants: {renderAssistants()}</div>

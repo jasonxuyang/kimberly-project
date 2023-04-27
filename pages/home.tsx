@@ -1,82 +1,34 @@
-import CreatePost from "@/components/createPost";
-import ReplyPost from "@/components/replyPost";
-import { deletePost, fetcher } from "@/utils/client";
+import Loading from "@/components/loading";
+import { PostComponent, PostInputComponent } from "@/components/post";
+import { fetcher } from "@/utils/client";
 import useAccounts from "@/utils/hooks/useAccounts";
 import useAuth from "@/utils/hooks/useAuth";
 import useRole from "@/utils/hooks/useRole";
 import { Post, Role } from "@prisma/client";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 
 export default function Home() {
   const { isSignedIn } = useAuth();
   const { currentRole, setCurrentRole } = useRole();
   const { hasAccount } = useAccounts();
   const { data, isLoading } = useSWR(`/api/posts`, fetcher);
-  if (isLoading) return <main>loading</main>;
+  if (isLoading) return <Loading />;
+
   const posts: Array<Post & { children?: Post[] }> = data.data;
 
-  const renderRoleChooser = () => {
-    return (
-      isSignedIn &&
-      !currentRole && (
-        <div className="flex gap-2">
-          Login as a:
-          {hasAccount(Role.PROFESSOR) && (
-            <button onClick={() => setCurrentRole(Role.PROFESSOR)}>
-              professor
-            </button>
-          )}
-          {hasAccount(Role.TA) && (
-            <button onClick={() => setCurrentRole(Role.TA)}>ta</button>
-          )}
-          {hasAccount(Role.STUDENT) && (
-            <button onClick={() => setCurrentRole(Role.STUDENT)}>
-              student
-            </button>
-          )}
-        </div>
-      )
-    );
-  };
-
   const renderPosts = () => {
+    if (!posts || !posts.length) return null;
     return posts.map((post) => {
-      return (
-        <div key={post.id} className="border-black border-2 m-2 p-2">
-          <div className="text-xl">{post.title}</div>
-          <div className="text-sm mb-2">{post.userFirstName}</div>
-          <div>{post.content}</div>
-          <ReplyPost parentId={post.id} />
-          <button
-            onClick={async () => {
-              await deletePost({ postId: post.id });
-              mutate("api/posts");
-            }}
-          >
-            Delete
-          </button>
-          <div>
-            {post.children?.map((reply) => {
-              return (
-                <div key={reply.id}>
-                  <div className="text-sm mb-2 inline mr-2">
-                    {reply.userFirstName ?? "Anonymous"}
-                  </div>
-                  {reply.content}{" "}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      );
+      return <PostComponent key={post.id} postData={post} />;
     });
   };
 
   return (
-    <main>
-      {renderRoleChooser()}
-      {<CreatePost />}
-      {renderPosts()}
+    <main className="flex flex-col w-full items-center mt-16 mb-16">
+      <div className="flex flex-col w-[90%] sm:w-[65%] gap-4">
+        {isSignedIn && <PostInputComponent />}
+        {renderPosts()}
+      </div>
     </main>
   );
 }

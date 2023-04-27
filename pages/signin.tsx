@@ -7,6 +7,7 @@ import { BaseSyntheticEvent, useState } from "react";
 
 export default function SignIn() {
   const router = useRouter();
+  const backUrl = router.query?.backUrl as string;
   const { signIn } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,7 +22,8 @@ export default function SignIn() {
     };
     if (await signIn(signInData)) {
       console.log("Sign in successful");
-      router.push("/");
+      console.log(backUrl);
+      router.push(backUrl ? backUrl : "/");
     } else {
       setError(ApiError.InvalidCredentials);
     }

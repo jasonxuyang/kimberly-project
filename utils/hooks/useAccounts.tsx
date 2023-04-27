@@ -27,6 +27,14 @@ export default function useAccounts() {
     }
   };
 
+  const hasMultipleAccounts = () => {
+    let count = 0;
+    if (accounts?.professor) count++;
+    if (accounts?.assistant) count++;
+    if (accounts?.student) count++;
+    return count > 1;
+  };
+
   const currentAccount = () => {
     if (!currentRole) return;
     switch (currentRole) {
@@ -53,5 +61,6 @@ export default function useAccounts() {
     hasAccount,
     fetchAndSetAccounts,
     currentAccount: currentAccount(),
+    hasMultipleAccounts: hasMultipleAccounts(),
   };
 }

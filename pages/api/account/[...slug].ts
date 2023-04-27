@@ -1,6 +1,6 @@
 import prisma from "@/prisma/prisma";
 import { ApiError, ApiResponse } from "@/utils/types";
-import { PrismaClient, Role } from "@prisma/client";
+import { Role } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(

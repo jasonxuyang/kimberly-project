@@ -1,5 +1,5 @@
 import userState from "@/recoil/userState";
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import { SignInProps, apiPost } from "../client";
 import { ApiResponse } from "../types";
 import { useEffect } from "react";
@@ -25,6 +25,7 @@ export default function useAuth() {
   }, []);
 
   const isSignedIn = !!user;
+
   const signIn = async (credentials: SignInProps) => {
     const response: ApiResponse = await apiPost(
       "/api/auth/signin",
@@ -40,6 +41,7 @@ export default function useAuth() {
     sessionStorage.setItem("_user", JSON.stringify(user));
     return true;
   };
+
   const signOut = () => {
     resetUser();
     resetRole();
@@ -48,5 +50,11 @@ export default function useAuth() {
     router.push("/");
     return true;
   };
-  return { user, isSignedIn, signIn, signOut };
+
+  const signInRedirect = (backUrl: string) => {
+    router.push({ pathname: "signin", query: { backUrl: backUrl } }, "signin");
+    console.log(router);
+  };
+
+  return { user, isSignedIn, signIn, signOut, signInRedirect };
 }
